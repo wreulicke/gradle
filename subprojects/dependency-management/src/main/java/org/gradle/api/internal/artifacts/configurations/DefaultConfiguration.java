@@ -596,6 +596,7 @@ public class DefaultConfiguration extends AbstractFileCollection implements Conf
 
     private void resolveToStateOrLater(final InternalState requestedState) {
         assertIsResolvable();
+        warnIfConfigurationIsDeprecatedForResolving();
 
         if (!projectStateHandler.hasMutableProjectState()) {
             // We don't have mutable access to the project, so we throw a deprecation warning and then continue with
@@ -609,6 +610,12 @@ public class DefaultConfiguration extends AbstractFileCollection implements Conf
             });
         } else {
             resolveExclusively(requestedState);
+        }
+    }
+
+    private void warnIfConfigurationIsDeprecatedForResolving() {
+        if (alternativesForResolving != null) {
+            DeprecationLogger.nagUserOfReplacedConfiguration(this.name, DeprecationLogger.ConfigurationDeprecationType.RESOLUTION, alternativesForResolving);
         }
     }
 
