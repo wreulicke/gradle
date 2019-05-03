@@ -19,6 +19,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ConfigurationContainer;
+import org.gradle.api.internal.artifacts.configurations.ConfigurationInternal;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SourceSet;
@@ -51,6 +52,7 @@ public class JavaLibraryPlugin implements Plugin<Project> {
         SourceSetContainer sourceSets = project.getExtensions().getByType(SourceSetContainer.class);
         ConfigurationContainer configurations = project.getConfigurations();
         addApiToMainSourceSet(project, sourceSets, configurations);
+        deprecateLegacyConfigurations(sourceSets, configurations);
     }
 
     private void addApiToMainSourceSet(Project project, SourceSetContainer sourceSets, ConfigurationContainer configurations) {
@@ -75,4 +77,9 @@ public class JavaLibraryPlugin implements Plugin<Project> {
         apiConfiguration.extendsFrom(compileConfiguration);
     }
 
+    private void deprecateLegacyConfigurations(SourceSetContainer sourceSets, ConfigurationContainer configurations) {
+        SourceSet sourceSet = sourceSets.getByName("main");
+        ConfigurationInternal compileConfiguration = (ConfigurationInternal) configurations.getByName(sourceSet.getCompileConfigurationName());
+        compileConfiguration.deprecate(sourceSet.getImplementationConfigurationName(), sourceSet.getApiConfigurationName());
+    }
 }

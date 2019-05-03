@@ -304,6 +304,19 @@ public class JavaBasePlugin implements Plugin<ProjectInternal> {
         sourceSet.setCompileClasspath(compileClasspathConfiguration);
         sourceSet.setRuntimeClasspath(sourceSet.getOutput().plus(runtimeClasspathConfiguration));
         sourceSet.setAnnotationProcessorPath(annotationProcessorConfiguration);
+
+        String runtimeElementsConfigurationName = sourceSet.getRuntimeElementsConfigurationName();
+
+        ((ConfigurationInternal) compileConfiguration).deprecate(implementationConfigurationName);
+        ((ConfigurationInternal) compileConfiguration).deprecateForConsuming(runtimeElementsConfigurationName);
+        ((ConfigurationInternal) compileConfiguration).deprecateForResolving(compileClasspathConfigurationName);
+
+        ((ConfigurationInternal) runtimeConfiguration).deprecate(runtimeOnlyConfigurationName);
+        ((ConfigurationInternal) runtimeConfiguration).deprecateForConsuming(runtimeElementsConfigurationName);
+        ((ConfigurationInternal) runtimeConfiguration).deprecateForResolving(runtimeClasspathConfigurationName);
+
+        ((ConfigurationInternal) compileOnlyConfiguration).deprecateForConsuming(runtimeElementsConfigurationName);
+        ((ConfigurationInternal) compileOnlyConfiguration).deprecateForResolving(compileClasspathConfigurationName);
     }
 
     private Action<ConfigurationInternal> configureDefaultTargetPlatform(final JavaPluginConvention convention) {
