@@ -18,6 +18,8 @@ package org.gradle.util;
 
 import com.google.common.annotations.VisibleForTesting;
 import javax.annotation.concurrent.ThreadSafe;
+
+import org.apache.commons.lang.StringUtils;
 import org.gradle.api.logging.configuration.WarningMode;
 import org.gradle.internal.Factory;
 import org.gradle.internal.featurelifecycle.DeprecatedFeatureUsage;
@@ -30,6 +32,8 @@ import org.gradle.internal.featurelifecycle.LoggingIncubatingFeatureHandler;
 import org.gradle.internal.featurelifecycle.UsageLocationReporter;
 
 import javax.annotation.Nullable;
+
+import java.util.List;
 
 import static org.gradle.internal.featurelifecycle.LoggingDeprecatedFeatureHandler.getRemovalDetails;
 
@@ -123,6 +127,35 @@ public class SingleMessageLogger {
                 String.format("Please use the %s method instead.", replacement),
                 null,
                 DeprecatedFeatureUsage.Type.USER_CODE_DIRECT);
+        }
+    }
+
+    public enum ConfigurationDeprecationType {
+        REMOVAL("use"),
+        CONSUMPTION("use attributes to consume"),
+        RESOLUTION("resolve");
+
+        private String usage;
+
+        ConfigurationDeprecationType(String usage) {
+            this.usage = usage;
+        }
+    }
+
+    public static void nagUserOfReplacedConfiguration(String configurationName, ConfigurationDeprecationType deprecationType, List<String> replacements) {
+        if (isEnabled()) {
+            String summary = String.format("The %s configuration has been deprecated for %s.", configurationName, deprecationType.name().toLowerCase());
+            String suggestion = "";
+            if (replacements.size() == 1) {
+                suggestion = String.format("Please %s the %s configuration instead.", deprecationType.usage, replacements.get(0));
+            } else if (replacements.size() > 1) {
+                suggestion = String.format("Please %s one of the following configurations instead: %s.", deprecationType.usage, StringUtils.join(replacements, ", "));
+            }
+            nagUserWith(
+                summary, deprecationType == ConfigurationDeprecationType.REMOVAL? thisWillBeRemovedMessage() : thisWillBecomeAnError(),
+                suggestion,
+                null,
+                deprecationType == ConfigurationDeprecationType.CONSUMPTION? DeprecatedFeatureUsage.Type.USER_CODE_INDIRECT : DeprecatedFeatureUsage.Type.USER_CODE_DIRECT);
         }
     }
 

@@ -17,6 +17,7 @@
 package org.gradle.api.internal.artifacts.configurations;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import groovy.lang.Closure;
@@ -126,6 +127,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -196,6 +198,9 @@ public class DefaultConfiguration extends AbstractFileCollection implements Conf
     private boolean transitive = true;
     private Set<Configuration> extendsFrom = new LinkedHashSet<Configuration>();
     private String description;
+    private List<String> alternativesForDeclaring;
+    private List<String> alternativesForConsuming;
+    private List<String> alternativesForResolving;
     private final Set<Object> excludeRules = new LinkedHashSet<Object>();
     private Set<ExcludeRule> parsedExcludeRules;
 
@@ -410,6 +415,41 @@ public class DefaultConfiguration extends AbstractFileCollection implements Conf
     @Override
     public Configuration setDescription(@Nullable String description) {
         this.description = description;
+        return this;
+    }
+
+    @Override
+    public boolean isDeprecatedForResolving() {
+        return alternativesForResolving != null;
+    }
+
+    @Override
+    @Nullable
+    public List<String> getDeclarationAlternatives() {
+        return alternativesForDeclaring;
+    }
+
+    @Nullable
+    @Override
+    public List<String> getConsumptionAlternatives() {
+        return alternativesForConsuming;
+    }
+
+    @Override
+    public Configuration deprecate(String... alternativesForDeclaring) {
+        this.alternativesForDeclaring = ImmutableList.copyOf(alternativesForDeclaring);
+        return this;
+    }
+
+    @Override
+    public Configuration deprecateForConsuming(String... alternativesForConsumption) {
+        this.alternativesForConsuming = ImmutableList.copyOf(alternativesForConsumption);
+        return this;
+    }
+
+    @Override
+    public Configuration deprecateForResolving(String... alternativesForResolving) {
+        this.alternativesForResolving =ImmutableList.copyOf(alternativesForResolving);
         return this;
     }
 

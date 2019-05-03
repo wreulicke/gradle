@@ -23,6 +23,8 @@ import org.gradle.api.internal.artifacts.transform.ExtraExecutionGraphDependenci
 import org.gradle.api.internal.attributes.AttributeContainerInternal;
 import org.gradle.util.Path;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Set;
 
 public interface ConfigurationInternal extends ResolveContext, Configuration, DependencyMetaDataProvider {
@@ -74,4 +76,46 @@ public interface ConfigurationInternal extends ResolveContext, Configuration, De
     Set<ExcludeRule> getAllExcludeRules();
 
     ExtraExecutionGraphDependenciesResolverFactory getDependenciesResolver();
+
+    /**
+     * @return alternative configurations that can be used to declare dependencies instead of this configuration. Returns 'null' if this configuration is not deprecated.
+     */
+    @Nullable
+    List<String> getDeclarationAlternatives();
+
+    /**
+     * @return alternatives configurations that can be used to consume a component instead of consuming this configuration. Returns 'null' if this configuration is not deprecated for consumption.
+     */
+    @Nullable
+    List<String> getConsumptionAlternatives();
+
+    /**
+     * @return true if the resolvability of this configuration is deprecated
+     */
+    boolean isDeprecatedForResolving();
+
+
+    /**
+     * Allows plugins to deprecate a configuration that will be removed in the next major Gradle version.
+     *
+     * @param alternativesForDeclaring alternative configurations that can be used to declare dependencies
+     * @return this configuration
+     */
+    Configuration deprecate(String... alternativesForDeclaring);
+
+    /**
+     * Allows plugins to deprecate the consumability property (canBeConsumed() == true) of a configuration that will be changed in the next major Gradle version.
+     *
+     * @param alternativesForConsumption alternative configurations that can be used for consumption
+     * @return this configuration
+     */
+    Configuration deprecateForConsuming(String... alternativesForConsumption);
+
+    /**
+     * Allows plugins to deprecate the resolvability property (canBeResolved() == true) of a configuration that will be changed in the next major Gradle version.
+     *
+     * @param alternativesForResolving alternative configurations that can be used for dependency resolution
+     * @return this configuration
+     */
+    Configuration deprecateForResolving(String... alternativesForResolving);
 }
