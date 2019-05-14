@@ -135,6 +135,20 @@ class KotlinScriptDependenciesResolverTest : AbstractKotlinIntegrationTest() {
     }
 
     @Test
+    fun `pass environment`() {
+        assertSucceeds(
+            withBuildScript("""
+                require(System.getProperty("mySysProp") == "systemValue")
+                require(findProperty("myGradleProp") == "gradleValue")
+                require(System.getenv("myEnvVar") == "envValue")
+            """),
+            "gradleJvmOptions" to listOf("-DmySysProp=systemValue"), // TODO investigate why not taken into account
+            "gradleOptions" to listOf("-DmySysProp=systemValue", "-PmyGradleProp=gradleValue"),
+            "TODO_gradleEnvironmentVariables" to mapOf("myEnvVar" to "envValue") // TODO use correct name once implemented in jetbrains/kotlin
+        )
+    }
+
+    @Test
     fun `report file fatality on TAPI failure`() {
         // thus disabling syntax highlighting
 
@@ -344,9 +358,9 @@ class KotlinScriptDependenciesResolverTest : AbstractKotlinIntegrationTest() {
         ).get()
 
     private
-    fun assertSucceeds(editedScript: File? = null) {
+    fun assertSucceeds(editedScript: File? = null, vararg env: Pair<String, Any?>) {
 
-        resolvedScriptDependencies(editedScript).apply {
+        resolvedScriptDependencies(editedScript, null, *env).apply {
             assertThat(this, notNullValue())
             this!!.assertContainsBasicDependencies()
         }

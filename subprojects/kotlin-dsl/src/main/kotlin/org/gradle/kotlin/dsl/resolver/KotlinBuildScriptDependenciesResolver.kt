@@ -183,6 +183,10 @@ class KotlinBuildScriptDependenciesResolver @VisibleForTesting constructor(
         fun stringList(key: String) =
             (environment[key] as? List<String>) ?: emptyList()
 
+        @Suppress("unchecked_cast")
+        fun stringMap(key: String) =
+            (environment[key] as? Map<String, String>) ?: emptyMap()
+
         fun path(key: String) =
             (environment[key] as? String)?.let(::File)
 
@@ -195,6 +199,7 @@ class KotlinBuildScriptDependenciesResolver @VisibleForTesting constructor(
             javaHome = path("gradleJavaHome"),
             options = stringList("gradleOptions"),
             jvmOptions = stringList("gradleJvmOptions"),
+            environmentVariables = stringMap("TODO_gradleEnvironmentVariables"), // TODO use correct name once implemented in jetbrains/kotlin
             correlationId = correlationId
         )
     }
