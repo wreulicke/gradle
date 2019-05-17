@@ -325,6 +325,7 @@ public class AsmBackedClassGenerator extends AbstractClassGenerator {
         private static final String RETURN_VOID_FROM_META_CLASS = Type.getMethodDescriptor(Type.VOID_TYPE, META_CLASS_TYPE);
         private static final String GET_DECLARED_METHOD_DESCRIPTOR = Type.getMethodDescriptor(METHOD_TYPE, STRING_TYPE, CLASS_ARRAY_TYPE);
         private static final String RETURN_OBJECT_FROM_TYPE = Type.getMethodDescriptor(OBJECT_TYPE, JAVA_LANG_REFLECT_TYPE);
+        private static final String RETURN_OBJECT_FROM_CLASS_OBJECT_ARRAY = Type.getMethodDescriptor(OBJECT_TYPE, CLASS_TYPE, OBJECT_ARRAY_TYPE);
         private static final String RETURN_CONFIGURABLE_FILE_COLLECTION = Type.getMethodDescriptor(CONFIGURABLE_FILE_COLLECTION_TYPE);
         private static final String RETURN_REGULAR_FILE_PROPERTY = Type.getMethodDescriptor(REGULAR_FILE_PROPERTY_TYPE);
         private static final String RETURN_DIRECTORY_PROPERTY = Type.getMethodDescriptor(DIRECTORY_PROPERTY_TYPE);
@@ -986,7 +987,13 @@ public class AsmBackedClassGenerator extends AbstractClassGenerator {
                     methodVisitor.visitLdcInsn(Type.getType(elementType));
                     methodVisitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, OBJECT_FACTORY_TYPE.getInternalName(), "mapProperty", RETURN_MAP_PROPERTY_FROM_CLASS_CLASS, true);
                 } else {
-                    throw new IllegalArgumentException();
+                    // GENERATE objectFactory.newInstance(type)
+                    Type propertyType = Type.getType(property.getType());
+                    methodVisitor.visitLdcInsn(propertyType);
+                    methodVisitor.visitInsn(Opcodes.ICONST_0);
+                    methodVisitor.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
+                    methodVisitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, OBJECT_FACTORY_TYPE.getInternalName(), "newInstance", RETURN_OBJECT_FROM_CLASS_OBJECT_ARRAY, true);
+                    methodVisitor.visitTypeInsn(Opcodes.CHECKCAST, propertyType.getInternalName());
                 }
             });
         }

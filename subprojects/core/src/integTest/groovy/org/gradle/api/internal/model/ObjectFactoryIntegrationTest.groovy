@@ -128,14 +128,14 @@ class ObjectFactoryIntegrationTest extends AbstractIntegrationSpec {
                 String getProp()
             }
             
-            objects.newInstance(Thing)
+            objects.newInstance(Thing).prop
 """
 
         expect:
         fails()
-        failure.assertHasCause("Could not create an instance of type Thing.")
-        failure.assertHasCause("Could not generate a decorated class for interface Thing.")
-        failure.assertHasCause("Cannot have abstract method Thing.getProp().")
+        // TODO wolfs: What error message do we expect here?
+        failure.assertHasCause("Could not create an instance of type java.lang.String.")
+        failure.assertHasCause("Class java.lang.String is final.")
     }
 
     def "services are injected into instances using constructor or getter"() {

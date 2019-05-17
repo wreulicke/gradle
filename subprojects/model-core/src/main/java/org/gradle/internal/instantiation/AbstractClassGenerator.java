@@ -166,12 +166,12 @@ abstract class AbstractClassGenerator implements ClassGenerator {
         handlers.add(dslMixInHandler);
         handlers.add(propertyTypedHandler);
         handlers.add(servicesHandler);
-        handlers.add(managedTypeHandler);
         for (Class<? extends Annotation> annotation : enabledAnnotations) {
             customAnnotationPropertyHandlers.add(new CustomInjectAnnotationPropertyHandler(annotation));
         }
         handlers.addAll(customAnnotationPropertyHandlers);
         handlers.add(injectionHandler);
+        handlers.add(managedTypeHandler);
 
         // Order is significant
         List<ClassValidator> validators = new ArrayList<ClassValidator>(2 + disabledAnnotations.size());
@@ -258,7 +258,7 @@ abstract class AbstractClassGenerator implements ClassGenerator {
 
             ClassGenerationHandler claimedBy = null;
             for (ClassGenerationHandler handler : generationHandlers) {
-                if (!handler.claimPropertyImplementation(propertyMetaData)) {
+                if (!handler.claimPropertyImplementation(propertyMetaData, claimedBy != null)) {
                     continue;
                 }
                 if (claimedBy == null) {
@@ -641,7 +641,7 @@ abstract class AbstractClassGenerator implements ClassGenerator {
          * Handler can claim the property, taking responsibility for generating whatever is required to make the property work.
          * Handler is also expected to take care of validation.
          */
-        boolean claimPropertyImplementation(PropertyMetadata property) {
+        boolean claimPropertyImplementation(PropertyMetadata property, boolean alreadyClaimed) {
             return false;
         }
 
@@ -699,7 +699,7 @@ abstract class AbstractClassGenerator implements ClassGenerator {
         }
 
         @Override
-        boolean claimPropertyImplementation(PropertyMetadata property) {
+        boolean claimPropertyImplementation(PropertyMetadata property, boolean alreadyClaimed) {
             if (property.getName().equals("asDynamicObject")) {
                 providesOwnDynamicObject = true;
                 return true;
@@ -804,7 +804,7 @@ abstract class AbstractClassGenerator implements ClassGenerator {
         }
 
         @Override
-        boolean claimPropertyImplementation(PropertyMetadata property) {
+        boolean claimPropertyImplementation(PropertyMetadata property, boolean alreadyClaimed) {
             if (extensible) {
                 if (property.getName().equals("extensions")) {
                     for (MethodMetadata getter : property.getOverridableGetters()) {
@@ -874,7 +874,7 @@ abstract class AbstractClassGenerator implements ClassGenerator {
         }
 
         @Override
-        boolean claimPropertyImplementation(PropertyMetadata property) {
+        boolean claimPropertyImplementation(PropertyMetadata property, boolean alreadyClaimed) {
             // Skip properties with non-abstract getter or setter implementations
             for (MethodMetadata getter : property.getters) {
                 if (!getter.isAbstract()) {
@@ -891,7 +891,6 @@ abstract class AbstractClassGenerator implements ClassGenerator {
             }
 
             // Property is readable and all getters and setters are abstract
-
             if (property.setters.isEmpty()) {
                 if (property.getType().equals(ConfigurableFileCollection.class)
                     || property.getType().equals(ListProperty.class)
@@ -899,7 +898,9 @@ abstract class AbstractClassGenerator implements ClassGenerator {
                     || property.getType().equals(MapProperty.class)
                     || property.getType().equals(RegularFileProperty.class)
                     || property.getType().equals(DirectoryProperty.class)
-                    || property.getType().equals(Property.class)) {
+                    || property.getType().equals(Property.class)
+                    || (!alreadyClaimed)
+                ) {
                     // Read-only property with managed type
                     readOnlyProperties.add(property);
                     return true;
@@ -1070,7 +1071,7 @@ abstract class AbstractClassGenerator implements ClassGenerator {
         private boolean hasServicesProperty;
 
         @Override
-        public boolean claimPropertyImplementation(PropertyMetadata property) {
+        public boolean claimPropertyImplementation(PropertyMetadata property, boolean alreadyClaimed) {
             if (property.getName().equals("services") && property.isReadable() && ServiceRegistry.class.isAssignableFrom(property.getType())) {
                 hasServicesProperty = true;
                 return true;
@@ -1095,7 +1096,7 @@ abstract class AbstractClassGenerator implements ClassGenerator {
         }
 
         @Override
-        public boolean claimPropertyImplementation(PropertyMetadata property) {
+        public boolean claimPropertyImplementation(PropertyMetadata property, boolean alreadyClaimed) {
             for (MethodMetadata getter : property.getters) {
                 if (getter.method.getAnnotation(annotation) != null) {
                     serviceInjectionProperties.add(property);

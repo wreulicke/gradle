@@ -23,7 +23,6 @@ import org.junit.ClassRule
 import spock.lang.Shared
 import spock.lang.Unroll
 
-import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.*
 import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.AbstractBean
 import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.AbstractBeanWithInheritedFields
 import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.Bean
@@ -34,6 +33,8 @@ import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.Inte
 import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.InterfaceFilePropertyBean
 import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.InterfaceListPropertyBean
 import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.InterfaceMapPropertyBean
+import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.InterfaceNestedBean
+import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.InterfacePrimitiveBean
 import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.InterfacePropertyBean
 import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.InterfaceSetPropertyBean
 import static org.gradle.internal.instantiation.AsmBackedClassGeneratorTest.InterfaceWithDefaultMethods
@@ -147,6 +148,16 @@ class AsmBackedClassGeneratedManagedStateTest extends AbstractClassGeneratorSpec
         bean.prop.empty
         bean.prop.from("a", "b")
         bean.prop.files == [projectDir.file("a"), projectDir.file("b")] as Set
+    }
+
+    def canConstructInstanceOfInterfaceWithNestedGetter() {
+        def projectDir = tmpDir.testDirectory
+        def bean = create(InterfaceNestedBean, TestUtil.createRootProject(projectDir).services)
+
+        expect:
+        bean.prop.prop.empty
+        bean.prop.prop.from("a", "b")
+        bean.prop.prop.files == [projectDir.file("a"), projectDir.file("b")] as Set
     }
 
     @Unroll

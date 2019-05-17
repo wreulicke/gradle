@@ -52,6 +52,7 @@ import org.gradle.internal.reflect.DirectInstantiator;
 import org.gradle.internal.reflect.JavaReflectionUtil;
 import org.gradle.internal.service.DefaultServiceRegistry;
 import org.gradle.internal.service.ServiceRegistry;
+import org.gradle.internal.service.UnknownServiceException;
 import org.gradle.test.fixtures.file.TestNameTestDirectoryProvider;
 import org.gradle.util.TestUtil;
 import org.junit.Rule;
@@ -434,12 +435,12 @@ public class AsmBackedClassGeneratorTest {
 
     @Test
     public void cannotCreateInstanceOfClassWithAbstractGetter() throws Exception {
+        AbstractGetterBean bean = newInstance(AbstractGetterBean.class);
         try {
-            newInstance(AbstractGetterBean.class);
+            bean.getThing();
             fail();
-        } catch (ClassGenerationException e) {
-            assertThat(e.getMessage(), equalTo("Could not generate a decorated class for class " + AbstractGetterBean.class.getName() + "."));
-            assertThat(e.getCause().getMessage(), equalTo("Cannot have abstract method AbstractGetterBean.getThing()."));
+        } catch (UnknownServiceException e) {
+            assertThat(e.getMessage(), equalTo("No service of type ObjectFactory available in DefaultServiceRegistry."));
         }
     }
 
@@ -468,12 +469,13 @@ public class AsmBackedClassGeneratorTest {
 
     @Test
     public void cannotCreateInstanceOfInterfaceWithAbstractGetterAndNoSetter() throws Exception {
+        GetterBeanInterface bean = newInstance(GetterBeanInterface.class);
         try {
-            newInstance(GetterBeanInterface.class);
+            bean.getThing();
             fail();
-        } catch (ClassGenerationException e) {
-            assertThat(e.getMessage(), equalTo("Could not generate a decorated class for interface " + GetterBeanInterface.class.getName() + "."));
-            assertThat(e.getCause().getMessage(), equalTo("Cannot have abstract method GetterBeanInterface.getThing()."));
+        } catch (UnknownServiceException e) {
+            // TODO wolfs: A better error message would be great
+            assertThat(e.getMessage(), equalTo("No service of type ObjectFactory available in DefaultServiceRegistry."));
         }
     }
 
@@ -1780,6 +1782,10 @@ public class AsmBackedClassGeneratorTest {
 
     public interface InterfaceFileCollectionBean {
         ConfigurableFileCollection getProp();
+    }
+
+    public interface InterfaceNestedBean {
+        InterfaceFileCollectionBean getProp();
     }
 
     public interface InterfacePropertyBean {
