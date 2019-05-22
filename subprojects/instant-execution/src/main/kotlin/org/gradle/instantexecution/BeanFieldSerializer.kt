@@ -16,7 +16,6 @@
 
 package org.gradle.instantexecution
 
-import org.gradle.api.GradleException
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.internal.GeneratedSubclasses
@@ -55,8 +54,8 @@ class BeanFieldSerializer(
                 writeString(field.name)
                 try {
                     valueSerializer(this, context)
-                } catch (e: Throwable) {
-                    throw GradleException("Could not save the value of field '${beanType.name}.${field.name}' with type ${finalValue?.javaClass?.name}.", e)
+                } catch (e: Throwable) { // Intentionally not Exception (may run user code)
+                    throw InstantExecutionException("Could not save the value of field '${beanType.name}.${field.name}' with type ${finalValue?.javaClass?.name}.", e)
                 }
                 context.logFieldSerialization("serialize", beanType, field.name, finalValue)
             }

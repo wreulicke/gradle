@@ -18,7 +18,6 @@ package org.gradle.instantexecution
 
 import groovy.lang.GroovyObject
 import org.gradle.api.DefaultTask
-import org.gradle.api.GradleException
 import org.gradle.api.Task
 import org.gradle.api.internal.AbstractTask
 import org.gradle.api.internal.ConventionTask
@@ -39,7 +38,6 @@ import org.gradle.internal.serialize.kryo.KryoBackedDecoder
 import org.gradle.internal.serialize.kryo.KryoBackedEncoder
 import org.gradle.util.GradleVersion
 import org.gradle.util.Path
-
 import java.io.File
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
@@ -118,21 +116,29 @@ class DefaultInstantExecution(
 
     private
     fun saveTasks(stateFile: File) {
-        val build = host.currentBuild
-        Files.createDirectories(stateFile.parentFile.toPath())
-        KryoBackedEncoder(stateFile.outputStream()).use { encoder ->
-            encoder.writeString(build.rootProject.name)
-            val scheduledTasks = build.scheduledTasks
-            saveRelevantProjectsFor(scheduledTasks, encoder)
-            val relevantClassPath = classPathFor(scheduledTasks)
-            encoder.serializeClassPath(relevantClassPath)
-            encoder.serializeCollection(scheduledTasks) { task ->
-                try {
-                    encoder.saveStateOf(task, build)
-                } catch (e: Throwable) {
-                    throw GradleException("Could not save state of $task.", e)
+        val failures = ArrayList<Throwable>()
+        try {
+            val build = host.currentBuild
+            Files.createDirectories(stateFile.parentFile.toPath())
+            KryoBackedEncoder(stateFile.outputStream()).use { encoder ->
+                encoder.writeString(build.rootProject.name)
+                val scheduledTasks = build.scheduledTasks
+                saveRelevantProjectsFor(scheduledTasks, encoder)
+                val relevantClassPath = classPathFor(scheduledTasks)
+                encoder.serializeClassPath(relevantClassPath)
+                encoder.serializeCollection(scheduledTasks) { task ->
+                    try {
+                        encoder.saveStateOf(task, build)
+                    } catch (e: Exception) {
+                        throw InstantExecutionException("Could not save state of $task.", e)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            failures.add(e)
+        }
+        if (failures.isNotEmpty()) {
+            throw InstantExecutionException("Could not save instant execution state to cache.", failures)
         }
     }
 
@@ -151,13 +157,17 @@ class DefaultInstantExecution(
 
     private
     fun loadTasks(stateFile: File) {
-        KryoBackedDecoder(stateFile.inputStream()).use { decoder ->
-            val rootProjectName = decoder.readString()
-            val build = host.createBuild(rootProjectName)
-            loadRelevantProjects(decoder, build)
-            build.autoApplyPlugins()
-            build.registerProjects()
-            build.scheduleTasks(loadTasksFor(decoder, build))
+        try {
+            KryoBackedDecoder(stateFile.inputStream()).use { decoder ->
+                val rootProjectName = decoder.readString()
+                val build = host.createBuild(rootProjectName)
+                loadRelevantProjects(decoder, build)
+                build.autoApplyPlugins()
+                build.registerProjects()
+                build.scheduleTasks(loadTasksFor(decoder, build))
+            }
+        } catch (e: Exception) {
+            throw InstantExecutionException("Could not load instant execution state from cache.", e)
         }
     }
 
