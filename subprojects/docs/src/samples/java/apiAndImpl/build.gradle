@@ -25,16 +25,16 @@ sourceSets {
 }
 
 dependencies {
-    apiCompile 'commons-codec:commons-codec:1.5'
+    apiImplementation 'commons-codec:commons-codec:1.5'
 
-    implCompile sourceSets.api.output
-    implCompile 'commons-lang:commons-lang:2.6'
+    implImplementation sourceSets.api.output
+    implImplementation 'commons-lang:commons-lang:2.6'
 
-    testCompile 'junit:junit:4.12'
-    testCompile sourceSets.api.output
-    testCompile sourceSets.impl.output
-    runtime configurations.apiRuntime
-    runtime configurations.implRuntime
+    testImplementation 'junit:junit:4.12'
+    testImplementation sourceSets.api.output
+    testImplementation sourceSets.impl.output
+    runtimeOnly configurations.apiRuntimeElements
+    runtimeOnly configurations.implRuntimeElements
 }
 
 jar {

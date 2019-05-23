@@ -1,6 +1,6 @@
 dependencies {
-    compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
-    "default" configurations.runtime
+    implementation group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
+    "default" configurations.runtimeElements
 }
 
 task jar(type: Jar) {
@@ -8,5 +8,5 @@ task jar(type: Jar) {
 }
 
 artifacts {
-    runtime jar
+    runtimeClasspath jar
 }

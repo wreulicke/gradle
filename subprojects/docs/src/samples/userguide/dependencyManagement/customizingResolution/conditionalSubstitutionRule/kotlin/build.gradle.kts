@@ -11,7 +11,7 @@
  */
 
 allprojects {
-    apply(plugin = "java")
+    apply(plugin = "java-library")
 
     group = "org.example"
     version = "1.0"
@@ -39,7 +39,7 @@ allprojects {
 }
 
 dependencies {
-    "compile"("org.example:project1:1.0")
+    "implementation"("org.example:project1:1.0")
 }
 
 tasks.register("showJarFiles") {
