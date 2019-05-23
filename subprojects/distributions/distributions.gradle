@@ -200,3 +200,4 @@ integTestTasks.configureEach {
 }
 
 apply from: 'binary-compatibility.gradle'
+apply from: 'distribution-project-dependencies.gradle.kts'
