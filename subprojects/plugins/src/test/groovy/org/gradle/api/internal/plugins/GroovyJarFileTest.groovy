@@ -39,7 +39,7 @@ class GroovyJarFileTest extends Specification {
     }
 
     def "parse 'groovy-all' Jar"() {
-        def jar = GroovyJarFile.parse(new File("/lib/groovy-all-2.5.7-all.jar"))
+        def jar = GroovyJarFile.parse(new File("/lib/groovy-all-2.5.7.jar"))
 
         expect:
         jar != null

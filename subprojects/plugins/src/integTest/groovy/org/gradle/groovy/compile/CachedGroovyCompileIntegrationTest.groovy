@@ -72,7 +72,7 @@ class CachedGroovyCompileIntegrationTest extends AbstractCachedCompileIntegratio
             plugins { id 'groovy' }
 
             ${mavenCentralRepository()}
-            dependencies { compile 'org.codehaus.groovy:groovy-all:2.5.7' }
+            dependencies { compile 'org.codehaus.groovy:groovy-all:2.4.5' } // old version
         """.stripIndent()
 
         when:

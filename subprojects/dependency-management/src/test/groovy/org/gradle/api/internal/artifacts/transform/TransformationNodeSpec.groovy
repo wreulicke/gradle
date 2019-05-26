@@ -59,6 +59,7 @@ class TransformationNodeSpec extends Specification {
         0 * hardSuccessor._
     }
 
+    // FIXME
     def "chained node with empty extra resolver only adds dependency on previous step and dependencies"() {
         def container = Stub(TaskDependencyContainer)
         def additionalNode = new TestNode()

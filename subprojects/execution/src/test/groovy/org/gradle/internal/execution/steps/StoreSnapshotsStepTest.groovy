@@ -30,6 +30,7 @@ import org.gradle.internal.fingerprint.CurrentFileCollectionFingerprint
 import org.gradle.internal.hash.HashCode
 import org.gradle.internal.snapshot.impl.ImplementationSnapshot
 
+// FIXME
 class StoreSnapshotsStepTest extends StepSpec implements FingerprinterFixture {
     def executionHistoryStore = Mock(ExecutionHistoryStore)
 

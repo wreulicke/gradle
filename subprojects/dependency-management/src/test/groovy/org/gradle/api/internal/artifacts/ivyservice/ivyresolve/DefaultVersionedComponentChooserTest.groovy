@@ -44,6 +44,7 @@ import org.gradle.util.TestUtil
 import spock.lang.Specification
 import spock.lang.Unroll
 
+// FIXME
 class DefaultVersionedComponentChooserTest extends Specification {
     def versionParser = new VersionParser()
     def versionSelectorScheme = new DefaultVersionSelectorScheme(new DefaultVersionComparator(), versionParser)

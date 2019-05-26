@@ -21,36 +21,36 @@ import spock.lang.Issue
 class GroovyBasePluginIntegrationTest extends AbstractIntegrationSpec {
     def "defaults Groovy class path to inferred Groovy dependency"() {
         file("build.gradle") << """
-apply plugin: "groovy-base"
-
-sourceSets {
-    custom
-}
-
-${mavenCentralRepository()}
-
-dependencies {
-    customCompile "$dependency"
-}
-
-task groovydoc(type: Groovydoc) {
-    classpath = sourceSets.custom.runtimeClasspath
-}
-
-task verify {
-    doLast {
-        assert compileCustomGroovy.groovyClasspath.files.any { it.name == "$jarFile" }
-        assert groovydoc.groovyClasspath.files.any { it.name == "$jarFile" }
-    }
-}
-"""
+            apply plugin: "groovy-base"
+            
+            sourceSets {
+                custom
+            }
+            
+            ${mavenCentralRepository()}
+            
+            dependencies {
+                customCompile "$dependency"
+            }
+            
+            task groovydoc(type: Groovydoc) {
+                classpath = sourceSets.custom.runtimeClasspath
+            }
+            
+            task verify {
+                doLast {
+                    assert compileCustomGroovy.groovyClasspath.files.any { it.name == "$jarFile" }
+                    assert groovydoc.groovyClasspath.files.any { it.name == "$jarFile" }
+                }
+            }
+        """
 
         expect:
         succeeds("verify")
 
         where:
         dependency                             | jarFile
-        "org.codehaus.groovy:groovy-all:2.5.7" | "groovy-all-2.5.7.jar"
+        "org.codehaus.groovy:groovy-all:2.5.7" | "groovy-2.5.7.jar"
         "org.codehaus.groovy:groovy:2.5.7"     | "groovy-2.5.7.jar"
     }
 

@@ -20,7 +20,7 @@ class PersonTest {
         assertEquals('2.5.7', GroovySystem.version)
     }
 
-    @Test 7ublic void testResourcesAreAvailable() {
+    @Test public void testResourcesAreAvailable() {
         assertNotNull(getClass().getResource('/testResource.txt'))
         assertNotNull(getClass().getResource('/testScript.groovy'))
     }
