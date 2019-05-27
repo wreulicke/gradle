@@ -56,9 +56,7 @@ class TestProjectGeneratorConfiguration {
 @Builder(prefix = "with",
     builderStrategy = ExternalStrategy,
     forClass = TestProjectGeneratorConfiguration,
-    excludes = ['projectName',
-        'templateName',
-        'language',
+    excludes = [
         'plugins',
         'repositories',
         'externalApiDependencies',
