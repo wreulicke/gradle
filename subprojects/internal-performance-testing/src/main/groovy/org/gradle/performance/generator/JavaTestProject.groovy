@@ -23,96 +23,96 @@ import static org.gradle.test.fixtures.dsl.GradleDsl.KOTLIN
 
 @CompileStatic
 enum JavaTestProject {
-    LARGE_MONOLITHIC_JAVA_PROJECT(new TestProjectGeneratorConfiguration("largeMonolithicJavaProject")
-        .setSourceFiles(50000)
-        .setSubProjects(0)
-        .setDaemonMemory('1536m')
-        .setCompilerMemory('4g')
+    LARGE_MONOLITHIC_JAVA_PROJECT(new TestProjectGeneratorConfigurationBuilder("largeMonolithicJavaProject")
+        .withSourceFiles(50000)
+        .withSubProjects(0)
+        .withDaemonMemory('1536m')
+        .withCompilerMemory('4g')
         .assembleChangeFile(-1)
-        .testChangeFile(-1)),
-    LARGE_JAVA_MULTI_PROJECT(new TestProjectGeneratorConfiguration("largeJavaMultiProject")
-        .setSourceFiles(100)
-        .setSubProjects(500)
-        .setDaemonMemory('1536m')
-        .setCompilerMemory('256m')
+        .testChangeFile(-1)
+        .create()),
+    LARGE_JAVA_MULTI_PROJECT(new TestProjectGeneratorConfigurationBuilder("largeJavaMultiProject")
+        .withSourceFiles(100)
+        .withSubProjects(500)
+        .withDaemonMemory('1536m')
+        .withCompilerMemory('256m')
         .assembleChangeFile()
-        .testChangeFile(450, 2250, 45000)),
-    LARGE_MONOLITHIC_GROOVY_PROJECT(new TestProjectGeneratorConfiguration("largeMonolithicGroovyProject", Language.GROOVY)
-        .setSourceFiles(50000)
-        .setSubProjects(0)
-        .setDaemonMemory('1536m')
-        .setCompilerMemory('4g')
+        .testChangeFile(450, 2250, 45000).create()),
+    LARGE_MONOLITHIC_GROOVY_PROJECT(new TestProjectGeneratorConfigurationBuilder("largeMonolithicGroovyProject", Language.GROOVY)
+        .withSourceFiles(50000)
+        .withSubProjects(0)
+        .withDaemonMemory('1536m')
+        .withCompilerMemory('4g')
         .assembleChangeFile(-1)
-        .testChangeFile(-1)),
-    LARGE_GROOVY_MULTI_PROJECT(new TestProjectGeneratorConfiguration("largeGroovyMultiProject", Language.GROOVY)
-        .setSourceFiles(100)
-        .setSubProjects(500)
-        .setDaemonMemory('1536m')
-        .setCompilerMemory('256m')
+        .testChangeFile(-1).create()),
+    LARGE_GROOVY_MULTI_PROJECT(new TestProjectGeneratorConfigurationBuilder("largeGroovyMultiProject", Language.GROOVY)
+        .withSourceFiles(100)
+        .withSubProjects(500)
+        .withDaemonMemory('1536m')
+        .withCompilerMemory('256m')
         .assembleChangeFile()
-        .testChangeFile(450, 2250, 45000)),
-    LARGE_JAVA_MULTI_PROJECT_KOTLIN_DSL(new TestProjectGeneratorConfiguration("largeJavaMultiProjectKotlinDsl", "largeJavaMultiProject")
-        .setSourceFiles(100)
-        .setSubProjects(500)
-        .setDaemonMemory('1536m')
-        .setCompilerMemory('256m')
+        .testChangeFile(450, 2250, 45000).create()),
+    LARGE_JAVA_MULTI_PROJECT_KOTLIN_DSL(new TestProjectGeneratorConfigurationBuilder("largeJavaMultiProjectKotlinDsl", "largeJavaMultiProject")
+        .withSourceFiles(100)
+        .withSubProjects(500)
+        .withDaemonMemory('1536m')
+        .withCompilerMemory('256m')
         .assembleChangeFile()
         .testChangeFile(450, 2250, 45000)
-        .setDsl(KOTLIN)
-    ),
+        .withDsl(KOTLIN)
+        .create()),
 
-    MEDIUM_MONOLITHIC_JAVA_PROJECT(new TestProjectGeneratorConfiguration("mediumMonolithicJavaProject")
-        .setSourceFiles(10000)
-        .setSubProjects(0)
-        .setDaemonMemory('512m')
-        .setCompilerMemory('1g')
+    MEDIUM_MONOLITHIC_JAVA_PROJECT(new TestProjectGeneratorConfigurationBuilder("mediumMonolithicJavaProject")
+        .withSourceFiles(10000)
+        .withSubProjects(0)
+        .withDaemonMemory('512m')
+        .withCompilerMemory('1g')
         .assembleChangeFile(-1)
-    ),
-    MEDIUM_JAVA_MULTI_PROJECT(new TestProjectGeneratorConfiguration("mediumJavaMultiProject")
-        .setSourceFiles(100)
-        .setSubProjects(100)
-        .setDaemonMemory('512m')
-        .setCompilerMemory('256m')
+        .create()),
+    MEDIUM_JAVA_MULTI_PROJECT(new TestProjectGeneratorConfigurationBuilder("mediumJavaMultiProject")
+        .withSourceFiles(100)
+        .withSubProjects(100)
+        .withDaemonMemory('512m')
+        .withCompilerMemory('256m')
         .assembleChangeFile()
-    ),
-    MEDIUM_JAVA_COMPOSITE_BUILD(new TestProjectGeneratorConfiguration("mediumJavaCompositeBuild", "mediumJavaMultiProject")
-        .setSourceFiles(100)
-        .setSubProjects(100)
-        .setDaemonMemory('768m')
-        .setCompilerMemory('256m')
+        .create()),
+    MEDIUM_JAVA_COMPOSITE_BUILD(new TestProjectGeneratorConfigurationBuilder("mediumJavaCompositeBuild", "mediumJavaMultiProject")
+        .withSourceFiles(100)
+        .withSubProjects(100)
+        .withDaemonMemory('768m')
+        .withCompilerMemory('256m')
         .assembleChangeFile()
         .composite(false)
-    ),
-    MEDIUM_JAVA_PREDEFINED_COMPOSITE_BUILD(new TestProjectGeneratorConfiguration("mediumJavaPredefinedCompositeBuild", "mediumJavaMultiProject")
-        .setSourceFiles(100)
-        .setSubProjects(100)
-        .setDaemonMemory('768m')
-        .setCompilerMemory('256m')
+        .create()),
+    MEDIUM_JAVA_PREDEFINED_COMPOSITE_BUILD(new TestProjectGeneratorConfigurationBuilder("mediumJavaPredefinedCompositeBuild", "mediumJavaMultiProject")
+        .withSourceFiles(100)
+        .withSubProjects(100)
+        .withDaemonMemory('768m')
+        .withCompilerMemory('256m')
         .assembleChangeFile()
         .composite(true)
-    ),
-    MEDIUM_JAVA_MULTI_PROJECT_WITH_TEST_NG(new TestProjectGeneratorConfiguration("mediumJavaMultiProjectWithTestNG")
-        .setSourceFiles(100)
-        .setSubProjects(100)
-        .setDaemonMemory('512m')
-        .setCompilerMemory('256m')
+        .create()),
+    MEDIUM_JAVA_MULTI_PROJECT_WITH_TEST_NG(new TestProjectGeneratorConfigurationBuilder("mediumJavaMultiProjectWithTestNG")
+        .withSourceFiles(100)
+        .withSubProjects(100)
+        .withDaemonMemory('512m')
+        .withCompilerMemory('256m')
         .assembleChangeFile()
         .testChangeFile(50, 250, 5000)
-        .setUseTestNG(true)
-    ),
-
-    SMALL_JAVA_MULTI_PROJECT(new TestProjectGeneratorConfiguration("smallJavaMultiProject")
-        .setSourceFiles(50)
-        .setSubProjects(10)
-        .setDaemonMemory("256m")
-        .setCompilerMemory("64m")
+        .withUseTestNG(true)
+        .create()),
+    SMALL_JAVA_MULTI_PROJECT(new TestProjectGeneratorConfigurationBuilder("smallJavaMultiProject")
+        .withSourceFiles(50)
+        .withSubProjects(10)
+        .withDaemonMemory("256m")
+        .withCompilerMemory("64m")
         .assembleChangeFile()
-    )
+        .create())
 
     private TestProjectGeneratorConfiguration config
 
     JavaTestProject(TestProjectGeneratorConfiguration config) {
-        this.config = config.build()
+        this.config = config
     }
 
     TestProjectGeneratorConfiguration getConfig() {
