@@ -209,7 +209,7 @@ class TaskTypeUpToDateIntegrationTest extends AbstractIntegrationSpec {
         """
             ${mavenCentralRepository()}
             dependencies {
-                compile "com.google.guava:guava:$version"
+                implementation "com.google.guava:guava:$version"
             }
         """
     }
