@@ -120,6 +120,7 @@ class TestProjectGeneratorConfigurationBuilder {
 
         config.subProjects = this.subProjects
         config.sourceFiles = this.sourceFiles
+        config.minLinesOfCodePerSourceFile = 100
         config.compositeBuild = this.compositeBuild
 
         config.daemonMemory = this.daemonMemory
