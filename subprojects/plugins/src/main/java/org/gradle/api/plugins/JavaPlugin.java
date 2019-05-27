@@ -202,6 +202,9 @@ public class JavaPlugin implements Plugin<ProjectInternal> {
     @Incubating
     public static final String ANNOTATION_PROCESSOR_CONFIGURATION_NAME = "annotationProcessor";
 
+    /**
+     * @deprecated Users should prefer {@link #TEST_IMPLEMENTATION_CONFIGURATION_NAME}.
+     */
     public static final String TEST_COMPILE_CONFIGURATION_NAME = "testCompile";
 
     /**
