@@ -135,6 +135,10 @@ class IvyPublishJavaIntegTest extends AbstractIvyPublishIntegTest {
 
     @Unroll("'#gradleConfiguration' dependencies end up in '#ivyConfiguration' configuration with '#plugin' plugin")
     void "maps dependencies in the correct Ivy configuration"() {
+        if (deprecatedConfiguration) {
+            executer.expectDeprecationWarning()
+        }
+
         given:
         file("settings.gradle") << '''
             rootProject.name = 'publishTest' 
@@ -184,17 +188,17 @@ class IvyPublishJavaIntegTest extends AbstractIvyPublishIntegTest {
         }
 
         where:
-        plugin         | gradleConfiguration | ivyConfiguration
-        'java'         | 'compile'           | 'compile'
-        'java'         | 'runtime'           | 'compile'
-        'java'         | 'implementation'    | 'runtime'
-        'java'         | 'runtimeOnly'       | 'runtime'
+        plugin         | gradleConfiguration | ivyConfiguration | deprecatedConfiguration
+        'java'         | 'compile'           | 'compile'        | true
+        'java'         | 'runtime'           | 'compile'        | true
+        'java'         | 'implementation'    | 'runtime'        | false
+        'java'         | 'runtimeOnly'       | 'runtime'        | false
 
-        'java-library' | 'api'               | 'compile'
-        'java-library' | 'compile'           | 'compile'
-        'java-library' | 'runtime'           | 'compile'
-        'java-library' | 'runtimeOnly'       | 'runtime'
-        'java-library' | 'implementation'    | 'runtime'
+        'java-library' | 'api'               | 'compile'        | false
+        'java-library' | 'compile'           | 'compile'        | true
+        'java-library' | 'runtime'           | 'compile'        | true
+        'java-library' | 'runtimeOnly'       | 'runtime'        | false
+        'java-library' | 'implementation'    | 'runtime'        | false
 
     }
 
@@ -290,16 +294,16 @@ class IvyPublishJavaIntegTest extends AbstractIvyPublishIntegTest {
             $dependencies
 
             dependencies {
-                compile 'org.springframework:spring-core:2.5.6', {
+                api 'org.springframework:spring-core:2.5.6', {
                     exclude group: 'commons-logging', module: 'commons-logging'
                 }
-                compile "commons-beanutils:commons-beanutils:1.8.3", {
+                api "commons-beanutils:commons-beanutils:1.8.3", {
                     exclude group: 'commons-logging'
                 }
-                compile "commons-dbcp:commons-dbcp:1.4", {
+                api "commons-dbcp:commons-dbcp:1.4", {
                     transitive = false
                 }
-                compile "org.apache.camel:camel-jackson:2.15.3", {
+                api "org.apache.camel:camel-jackson:2.15.3", {
                     exclude module: 'camel-core'
                 }
             }
@@ -453,7 +457,7 @@ class IvyPublishJavaIntegTest extends AbstractIvyPublishIntegTest {
 
             ${mavenCentralRepository()}
 
-            configurations.compile.defaultDependencies { deps ->
+            configurations.api.defaultDependencies { deps ->
                 deps.add project.dependencies.create("org.test:default-dependency:1.1")
             }
 """
