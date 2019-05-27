@@ -26,6 +26,8 @@ import spock.lang.Ignore
 import spock.lang.Unroll
 
 class DependencyInsightReportTaskIntegrationTest extends AbstractIntegrationSpec {
+    def jvmVersion = JavaVersion.current().majorVersion
+
     def setup() {
         executer.requireOwnGradleUserHomeDir()
         settingsFile << """
@@ -1704,13 +1706,13 @@ project :
    variant "runtimeClasspath" [
       org.gradle.usage               = java-runtime
       org.gradle.dependency.bundling = external
-      org.gradle.jvm.version         = 11
+      org.gradle.jvm.version         = $jvmVersion
    ]
    variant "runtimeElements" [
       org.gradle.usage               = java-runtime-jars (compatible with: java-runtime)
       org.gradle.dependency.bundling = external
       org.gradle.category            = library (not requested)
-      org.gradle.jvm.version         = 11
+      org.gradle.jvm.version         = $jvmVersion
    ]
 
 project :
@@ -1763,7 +1765,7 @@ org:leaf2:1.0
 
       Requested attributes not found in the selected variant:
          org.gradle.dependency.bundling = external
-         org.gradle.jvm.version         = 11
+         org.gradle.jvm.version         = $jvmVersion
    ]
 
 org:leaf2:1.0
@@ -1814,7 +1816,7 @@ project :impl
       org.gradle.usage               = java-api-jars (compatible with: java-api)
       org.gradle.dependency.bundling = external
       org.gradle.category            = library (not requested)
-      org.gradle.jvm.version         = 11
+      org.gradle.jvm.version         = $jvmVersion
    ]
 
 project :impl
