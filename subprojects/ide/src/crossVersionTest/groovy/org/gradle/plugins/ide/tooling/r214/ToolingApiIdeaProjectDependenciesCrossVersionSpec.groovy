@@ -39,8 +39,8 @@ allprojects {
 }
 project(':a') {
     dependencies {
-        compile project(':')
-        compile project(':a:b')
+        implementation project(':')
+        implementation project(':a:b')
     }
 }
 '''

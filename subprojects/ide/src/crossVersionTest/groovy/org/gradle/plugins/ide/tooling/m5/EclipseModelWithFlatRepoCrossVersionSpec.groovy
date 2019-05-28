@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-	compile "some:lib:1.0"
+	implementation "some:lib:1.0"
 }
         """
 

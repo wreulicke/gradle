@@ -62,9 +62,9 @@ repositories {
 }
 
 dependencies {
-    compile 'foo.bar:coolLib:2.0'
-    compile 'unresolved.org:funLib:1.0'
-    compile files('yetAnotherJar.jar')
+    implementation 'foo.bar:coolLib:2.0'
+    implementation 'unresolved.org:funLib:1.0'
+    implementation files('yetAnotherJar.jar')
 }
 """
     }

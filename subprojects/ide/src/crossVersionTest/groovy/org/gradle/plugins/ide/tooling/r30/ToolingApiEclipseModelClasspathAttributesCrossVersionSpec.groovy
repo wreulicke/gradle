@@ -32,7 +32,7 @@ class ToolingApiEclipseModelClasspathAttributesCrossVersionSpec extends ToolingA
         """apply plugin: 'java'
            apply plugin: 'eclipse'
            ${jcenterRepository()}
-           dependencies { compile 'com.google.guava:guava:18.0' }
+           dependencies { implementation 'com.google.guava:guava:18.0' }
            eclipse {
                classpath {
                    downloadJavadoc = true

@@ -41,7 +41,7 @@ class ToolingApiEclipseModelCustomLibrarySourceAndJavadocCrossVersionSpec extend
             ${jcenterRepository()}
 
             dependencies {
-                compile 'org.example:example-lib:1.0'
+                implementation 'org.example:example-lib:1.0'
             }
 
             eclipse {

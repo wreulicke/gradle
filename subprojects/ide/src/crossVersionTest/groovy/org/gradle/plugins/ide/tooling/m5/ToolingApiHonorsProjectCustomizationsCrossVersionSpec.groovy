@@ -106,8 +106,8 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 ${mavenCentralRepository()}
 dependencies {
-    compile 'commons-lang:commons-lang:2.5'
-    runtime 'commons-io:commons-io:1.4'
+    implementation 'commons-lang:commons-lang:2.5'
+    runtimeOnly 'commons-io:commons-io:1.4'
 }
 eclipse { classpath { downloadJavadoc = true } }
 """

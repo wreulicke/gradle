@@ -46,8 +46,8 @@ class ToolingApiEclipseModelWtpClasspathAttributesCrossVersionSpec extends Tooli
         """apply plugin: 'java'
            repositories { $localMaven }
            dependencies {
-               compile 'org.example:example-api:1.0'
-               compile project(':sub')
+               implementation 'org.example:example-api:1.0'
+               implementation project(':sub')
            }
            project(':sub') { apply plugin : 'java' }
         """
@@ -71,7 +71,7 @@ class ToolingApiEclipseModelWtpClasspathAttributesCrossVersionSpec extends Tooli
          """apply plugin: 'java'
             $pluginDeclaration
             repositories { $localMaven }
-            dependencies { compile 'org.example:example-api:1.0' }
+            dependencies { implementation 'org.example:example-api:1.0' }
          """
 
         when:
@@ -96,7 +96,7 @@ class ToolingApiEclipseModelWtpClasspathAttributesCrossVersionSpec extends Tooli
         """apply plugin: 'java'
            apply plugin: 'eclipse-wtp'
            repositories { $localMaven }
-           dependencies { compile 'org.example:example-lib:1.0' }
+           dependencies { implementation 'org.example:example-lib:1.0' }
         """
 
         when:
@@ -116,8 +116,8 @@ class ToolingApiEclipseModelWtpClasspathAttributesCrossVersionSpec extends Tooli
            apply plugin: 'war'
            apply plugin: 'eclipse-wtp'
            repositories { $localMaven }
-           dependencies { compile 'org.example:example-lib:1.0' }
-           eclipse.wtp.component.rootConfigurations += [ configurations.compile ]
+           dependencies { implementation 'org.example:example-lib:1.0' }
+           eclipse.wtp.component.rootConfigurations += [ configurations.compileClasspath ]
         """
 
         when:
@@ -139,9 +139,9 @@ class ToolingApiEclipseModelWtpClasspathAttributesCrossVersionSpec extends Tooli
            repositories { $localMaven }
            dependencies {
                providedRuntime 'org.example:example-api:1.0'
-               compile 'org.example:example-lib:1.0'
+               implementation 'org.example:example-lib:1.0'
            }
-           eclipse.wtp.component.rootConfigurations += [ configurations.compile ]
+           eclipse.wtp.component.rootConfigurations += [ configurations.compileClasspath ]
         """
 
         when:
@@ -158,7 +158,7 @@ class ToolingApiEclipseModelWtpClasspathAttributesCrossVersionSpec extends Tooli
         """apply plugin: 'java'
            apply plugin: 'war'
            repositories { $localMaven }
-           dependencies { compile 'org.example:example-lib:1.0' }
+           dependencies { implementation 'org.example:example-lib:1.0' }
         """
 
         when:
@@ -180,7 +180,7 @@ class ToolingApiEclipseModelWtpClasspathAttributesCrossVersionSpec extends Tooli
            repositories { $localMaven }
            dependencies {
                providedRuntime 'org.example:example-api:1.0'
-               compile 'org.example:example-lib:1.0'
+               implementation 'org.example:example-lib:1.0'
            }
         """
 
@@ -242,8 +242,8 @@ class ToolingApiEclipseModelWtpClasspathAttributesCrossVersionSpec extends Tooli
            apply plugin: 'war'
            repositories { $localMaven }
            dependencies {
-               compile 'org.example:example-api:1.0'
-               compile project(':sub')
+               implementation 'org.example:example-api:1.0'
+               implementation project(':sub')
            }
            project(':sub') { apply plugin : 'java' }
         """

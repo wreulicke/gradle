@@ -41,8 +41,8 @@ configurations {
 }
 
 dependencies {
-    compile project(':a')
-    compile 'com.google.guava:guava:17.0'
+    implementation project(':a')
+    implementation 'com.google.guava:guava:17.0'
     provided 'org.slf4j:slf4j-log4j12:1.7.12'
 }
 
@@ -89,21 +89,21 @@ subprojects {
 
 configure(project(':a')) {
     dependencies {
-        compile 'someGroup:someArtifact:17.0'
-        compile project(':b')
+        implementation 'someGroup:someArtifact:17.0'
+        implementation project(':b')
     }
 }
 
 
 configure(project(':b')) {
     dependencies {
-        compile project(':c')
+        implementation project(':c')
     }
 }
 
 configure(project(':c')) {
     dependencies {
-        compile 'someGroup:someArtifact:16.0.1'
+        implementation 'someGroup:someArtifact:16.0.1'
     }
 }
 """

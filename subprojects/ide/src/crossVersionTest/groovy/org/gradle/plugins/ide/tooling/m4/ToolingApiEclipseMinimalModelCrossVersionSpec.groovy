@@ -25,15 +25,15 @@ class ToolingApiEclipseMinimalModelCrossVersionSpec extends ToolingApiSpecificat
         file('build.gradle').text = '''
 apply plugin: 'java'
 dependencies {
-    compile project(':child')
-    compile files { throw new RuntimeException() }
-    compile 'this.lib.surely.does.not.exist:indeed:1.0'
+    implementation project(':child')
+    implementation files { throw new RuntimeException() }
+    implementation 'this.lib.surely.does.not.exist:indeed:1.0'
 }
 project(':child') {
     apply plugin: 'java'
     dependencies {
-        compile files { throw new RuntimeException() }
-        compile 'this.lib.surely.does.not.exist:indeed:2.0'
+        implementation files { throw new RuntimeException() }
+        implementation 'this.lib.surely.does.not.exist:indeed:2.0'
     }
 }
 '''

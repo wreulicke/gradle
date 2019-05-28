@@ -189,8 +189,8 @@ project(':impl') {
     }
 
     dependencies {
-        compile project(':api')
-        testCompile 'foo.bar:coolLib:1.0'
+        implementation project(':api')
+        testImplementation 'foo.bar:coolLib:1.0'
     }
 
     idea.module.downloadJavadoc = true
@@ -236,13 +236,13 @@ subprojects {
 
 project(':impl') {
     dependencies {
-        compile project(':api')
+        implementation project(':api')
     }
 }
 
 project(':contrib:impl') {
     dependencies {
-        compile project(':contrib:api')
+        implementation project(':contrib:api')
     }
 }
 """
@@ -303,8 +303,8 @@ project(':impl') {
     apply plugin: 'idea'
 
     dependencies {
-        compile project(':api')
-        testCompile 'i.dont:Exist:2.4'
+        implementation project(':api')
+        testImplementation 'i.dont:Exist:2.4'
     }
 }
 """
