@@ -64,7 +64,7 @@ class TestProgressDaemonErrorsCrossVersionSpec extends ToolingApiSpecification {
         buildFile << """
             apply plugin: 'java'
             ${mavenCentralRepository()}
-            dependencies { testCompile 'junit:junit:4.12' }
+            dependencies { testImplementation 'junit:junit:4.12' }
             test.doLast { 
                 ${server.callFromBuild('sync')} 
                 Thread.sleep(120000)

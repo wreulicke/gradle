@@ -198,7 +198,7 @@ class BasicProjectConfigurationProgressCrossVersionSpec extends ToolingApiSpecif
             allprojects { 
                 apply plugin: 'java'
                 ${mavenCentralRepository()}
-                dependencies { testCompile 'junit:junit:4.12' }
+                dependencies { testImplementation 'junit:junit:4.12' }
             }
 """
         file("src/main/java/Thing.java") << """class Thing { }"""
@@ -216,11 +216,11 @@ class BasicProjectConfigurationProgressCrossVersionSpec extends ToolingApiSpecif
             allprojects {   
                 apply plugin: 'java'
                 ${mavenCentralRepository()}
-                dependencies { testCompile 'junit:junit:4.12' }
+                dependencies { testImplementation 'junit:junit:4.12' }
             }
             dependencies {
-                compile project(':a')
-                compile project(':b')
+                implementation project(':a')
+                implementation project(':b')
             }
 """
         file("buildSrc/a/src/main/java/A.java") << "public class A {}"

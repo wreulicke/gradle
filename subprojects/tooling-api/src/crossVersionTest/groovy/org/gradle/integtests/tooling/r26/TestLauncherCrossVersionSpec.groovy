@@ -515,7 +515,7 @@ class TestLauncherCrossVersionSpec extends TestLauncherSpec {
         allprojects{
             apply plugin: 'java'
             ${mavenCentralRepository()}
-            dependencies { testCompile 'junit:junit:4.12' }
+            dependencies { testImplementation 'junit:junit:4.12' }
         }
         """
     }

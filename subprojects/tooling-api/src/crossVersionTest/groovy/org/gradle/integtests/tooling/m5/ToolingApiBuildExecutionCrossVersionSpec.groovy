@@ -137,7 +137,7 @@ task c
         file('build.gradle') << '''
 apply plugin: 'java'
 dependencies {
-    compile files { throw new RuntimeException('broken') }
+    implementation files { throw new RuntimeException('broken') }
 }
 '''
 

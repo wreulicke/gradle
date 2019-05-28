@@ -43,13 +43,13 @@ class BuildProgressCrossVersionSpec extends ToolingApiSpecification {
         buildFile << """
             allprojects { apply plugin: 'java' }
             dependencies {
-                compile project(':a')
+                implementation project(':a')
             }
             configurations.compile.each { println it }
 """
         file("a/build.gradle") << """
             dependencies {
-                compile project(':b')
+                implementation project(':b')
             }
             configurations.compile.each { println it }
 """
@@ -115,10 +115,10 @@ class BuildProgressCrossVersionSpec extends ToolingApiSpecification {
             }
             
             dependencies {
-                compile project(':a')
-                compile "group:projectB:1.0"
-                compile "group:projectC:1.+"
-                compile "group:projectD:2.0-SNAPSHOT"
+                implementation project(':a')
+                implementation "group:projectB:1.0"
+                implementation "group:projectC:1.+"
+                implementation "group:projectD:2.0-SNAPSHOT"
             }
             configurations.compile.each { println it }
 """
