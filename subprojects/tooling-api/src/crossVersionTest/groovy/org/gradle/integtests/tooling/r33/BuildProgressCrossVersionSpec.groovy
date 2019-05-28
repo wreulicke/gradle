@@ -75,7 +75,7 @@ class BuildProgressCrossVersionSpec extends ToolingApiSpecification {
             allprojects { 
                 apply plugin: 'java'
                 ${mavenCentralRepository()}
-                dependencies { testCompile 'junit:junit:4.12' }
+                dependencies { testImplementation 'junit:junit:4.12' }
             }
 """
         file("src/main/java/Thing.java") << """class Thing { }"""
@@ -119,7 +119,7 @@ class BuildProgressCrossVersionSpec extends ToolingApiSpecification {
         given:
         buildFile << """
             allprojects { apply plugin: 'java' }
-            dependencies { compile 'thing:thing:1.0' }
+            dependencies { implementation 'thing:thing:1.0' }
 """
         file("src/main/java/Thing.java") << """class Thing { }"""
 
@@ -179,13 +179,13 @@ class BuildProgressCrossVersionSpec extends ToolingApiSpecification {
         buildFile << """
             allprojects { apply plugin: 'java' }
             dependencies {
-                compile project(':a')
+                implementation project(':a')
             }
             configurations.compile.each { println it }
 """
         file("a/build.gradle") << """
             dependencies {
-                compile project(':b')
+                implementation project(':b')
             }
             configurations.compile.each { println it }
 """

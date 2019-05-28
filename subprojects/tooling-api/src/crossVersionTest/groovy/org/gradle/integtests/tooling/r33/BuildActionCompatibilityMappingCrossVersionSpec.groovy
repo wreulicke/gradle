@@ -35,7 +35,7 @@ class BuildActionCompatibilityMappingCrossVersionSpec extends ToolingApiSpecific
             }
             project(':a') {
                 dependencies {
-                    compile project(':b')
+                    implementation project(':b')
                 }
             }
         """
