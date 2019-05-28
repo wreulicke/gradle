@@ -3,7 +3,7 @@ val implementation = configurations.create("implementation")
 // tag::generated-file-dependencies[]
 dependencies {
     implementation(files("$buildDir/classes") {
-        builtBy("implementation")
+        builtBy("compile")
     })
 }
 
