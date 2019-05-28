@@ -33,8 +33,8 @@ class ToolingApiEclipseModelCrossVersionSpec extends ToolingApiSpecification {
         buildFile << """allprojects { apply plugin: 'java' }
 repositories { maven { url '${mavenRepo.uri}' } }
 dependencies {
-    compile project(':sub')
-    compile 'org.example:example-lib:1.0'
+    implementation project(':sub')
+    implementation 'org.example:example-lib:1.0'
 }"""
 
     }

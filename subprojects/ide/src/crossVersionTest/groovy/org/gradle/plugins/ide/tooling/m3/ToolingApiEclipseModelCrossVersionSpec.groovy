@@ -150,9 +150,9 @@ rootProject.name = 'root'
 allprojects { apply plugin: 'java' }
 ${mavenCentralRepository()}
 dependencies {
-    compile 'commons-lang:commons-lang:2.5'
-    compile project(':a')
-    runtime 'commons-io:commons-io:1.4'
+    implementation 'commons-lang:commons-lang:2.5'
+    implementation project(':a')
+    runtimeOnly 'commons-io:commons-io:1.4'
 }
 """
 
@@ -176,7 +176,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 dependencies {
-    compile files { throw new RuntimeException('should not be resolving this') }
+    implementation files { throw new RuntimeException('should not be resolving this') }
 }
 '''
 
@@ -199,8 +199,8 @@ allprojects {
 }
 project(':a') {
     dependencies {
-        compile project(':')
-        compile project(':a:b')
+        implementation project(':')
+        implementation project(':a:b')
     }
 }
 '''
@@ -240,14 +240,14 @@ allprojects {
 }
 project(':a') {
     dependencies {
-        compile project(':')
-        compile project(':a:b')
-        compile project(':c')
+        implementation project(':')
+        implementation project(':a:b')
+        implementation project(':c')
     }
 }
 project(':c') {
     dependencies {
-        compile project(':a:b')
+        implementation project(':a:b')
     }
 }
 '''

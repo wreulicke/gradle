@@ -35,13 +35,13 @@ subprojects {
 
 project(':impl') {
     dependencies {
-        compile project(':api')
+        implementation project(':api')
     }
 }
 
 project(':contrib:impl') {
     dependencies {
-        compile project(':contrib:api')
+        implementation project(':contrib:api')
     }
 }
 """

@@ -40,7 +40,7 @@ project(':impl') {
     apply plugin: 'idea'
 
     dependencies {
-        compile project(':api')
+        implementation project(':api')
     }
 }
 """
@@ -79,8 +79,8 @@ project(':impl') {
     }
 
     dependencies {
-        compile project(':api')
-        testCompile 'foo.bar:coolLib:1.0'
+        implementation project(':api')
+        testImplementation 'foo.bar:coolLib:1.0'
     }
 
     idea.module.downloadJavadoc = true

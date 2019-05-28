@@ -44,7 +44,7 @@ class ToolingApiEclipseModelCrossVersionSpec extends ToolingApiSpecification {
            apply plugin: 'eclipse'
 
            repositories { $localMaven }
-           dependencies { compile 'org.example:example-lib:1.0' }
+           dependencies { implementation 'org.example:example-lib:1.0' }
 
            eclipse {
                classpath {

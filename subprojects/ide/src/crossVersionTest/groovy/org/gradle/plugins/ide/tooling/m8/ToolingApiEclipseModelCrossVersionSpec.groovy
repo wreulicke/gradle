@@ -27,7 +27,7 @@ gradle.projectsEvaluated {
     ${mavenCentralRepository()}
 }
 dependencies {
-    compile 'commons-lang:commons-lang:2.5'
+    implementation 'commons-lang:commons-lang:2.5'
 }
 """
 
