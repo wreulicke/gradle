@@ -54,7 +54,7 @@ public class GradleBackedArtifactBuilder implements ArtifactBuilder {
         rootDir.file("settings.gradle").touch();
         rootDir.file("build.gradle").writelns(
                 "apply plugin: 'java'",
-                "dependencies { compile gradleApi() }",
+                "dependencies { implementation gradleApi() }",
                 String.format("jar.destinationDir = file('%s')", FilenameUtils.separatorsToUnix(jarFile.getParent())),
                 String.format("jar.archiveName = '%s'", jarFile.getName()),
                 // disable jar file caching to prevent file locking
