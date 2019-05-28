@@ -205,6 +205,8 @@ public class JavaPlugin implements Plugin<ProjectInternal> {
     public static final String ANNOTATION_PROCESSOR_CONFIGURATION_NAME = "annotationProcessor";
 
     /**
+     * The name of the test compile dependencies configuration.
+     *
      * @deprecated Use {@link #TEST_IMPLEMENTATION_CONFIGURATION_NAME} instead.
      */
     @Deprecated
