@@ -57,7 +57,7 @@ class JavaCompileIntegrationTest extends AbstractPluginIntegrationTest {
             }
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
 """
@@ -258,7 +258,7 @@ class JavaCompileIntegrationTest extends AbstractPluginIntegrationTest {
 
             dependencies {
                 implementation 'org.apache.commons:commons-lang3:3.4'
-                testCompile 'junit:junit:4.12' // not using testImplementation intentionally, that's not what we want to test
+                testImplementation 'junit:junit:4.12'
             }
         """
         file('src/main/java/Text.java') << '''import org.apache.commons.lang3.StringUtils;
@@ -443,7 +443,7 @@ class JavaCompileIntegrationTest extends AbstractPluginIntegrationTest {
                 ${mavenCentralRepository()}
 
                 dependencies {
-                    ${dependencies.collect { "compile ${it}"}.join('\n') }
+                    ${dependencies.collect { "implementation ${it}"}.join('\n') }
                 }
             """
         }
@@ -516,7 +516,7 @@ class JavaCompileIntegrationTest extends AbstractPluginIntegrationTest {
             apply plugin: 'java'
             
             dependencies {
-               compile files('foo.jar')
+               implementation files('foo.jar')
             }
         '''
         file('foo.jar') << 'this is clearly not a well formed jar file'
@@ -537,7 +537,7 @@ class JavaCompileIntegrationTest extends AbstractPluginIntegrationTest {
             apply plugin: 'java'
             
             dependencies {
-               compile files('broken-utf8.jar')
+               implementation files('broken-utf8.jar')
             }
         '''
         resources.findResource('broken-utf8.is-a-jar').copyTo(file('broken-utf8.jar'))
@@ -561,7 +561,7 @@ class JavaCompileIntegrationTest extends AbstractPluginIntegrationTest {
             }
             
             dependencies {
-               compile files(fooJar.archivePath)
+               implementation files(fooJar.archivePath)
             }
             
             compileJava.dependsOn(fooJar)
@@ -586,7 +586,7 @@ class JavaCompileIntegrationTest extends AbstractPluginIntegrationTest {
             apply plugin: 'java'
             
             dependencies {
-               compile files('classes')
+               implementation files('classes')
             }
             
         '''
@@ -614,7 +614,7 @@ class JavaCompileIntegrationTest extends AbstractPluginIntegrationTest {
             apply plugin: 'java'
             
             dependencies {
-               compile project(':b')
+               implementation project(':b')
             }
         '''
         file('src/main/java/Lambda.java') << 'public class Lambda extends λ {}'
