@@ -256,7 +256,7 @@ class JavaLibraryCompilationIntegrationTest extends AbstractIntegrationSpec {
                 }
 
                 dependencies {
-                    compile project(':b')
+                    implementation project(':b')
                 }
             """)
             src {
@@ -318,7 +318,7 @@ class JavaLibraryCompilationIntegrationTest extends AbstractIntegrationSpec {
                 apply plugin: 'java'
 
                 dependencies {
-                    compile project(':b')
+                    implementation project(':b')
                 }
             """)
             src {

@@ -28,7 +28,7 @@ abstract class AbstractJavaCompileAvoidanceAgainstJarIntegrationSpec extends Abs
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
         """
@@ -66,7 +66,7 @@ abstract class AbstractJavaCompileAvoidanceAgainstJarIntegrationSpec extends Abs
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
             project(':a') {

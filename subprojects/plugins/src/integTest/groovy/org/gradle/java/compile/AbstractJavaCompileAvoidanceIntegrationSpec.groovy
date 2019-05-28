@@ -27,7 +27,8 @@ include 'a', 'b'
 """
         buildFile << """
             allprojects {
-                apply plugin: 'java'
+                if (name in []) apply plugin: 'java-library'
+                else apply plugin: 'java'
                 task emptyDirs(type: Sync) {
                     into 'build/empty-dirs'
                     from 'src/empty-dirs'
@@ -77,7 +78,7 @@ include 'a', 'b'
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
         """
@@ -202,7 +203,7 @@ include 'a', 'b'
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
         """
@@ -243,7 +244,7 @@ public class ToolImpl {
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
         """
@@ -317,7 +318,7 @@ public class ToolImpl {
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
         """
@@ -380,7 +381,7 @@ public class ToolImpl {
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
         """
@@ -416,7 +417,7 @@ public class ToolImpl {
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
         """
@@ -485,7 +486,7 @@ public class ToolImpl {
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
         """
@@ -576,7 +577,7 @@ public class ToolImpl {
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
         """
@@ -627,7 +628,7 @@ public class ToolImpl {
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
         """
@@ -671,7 +672,7 @@ public class ToolImpl {
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
             project(':c') {
@@ -679,7 +680,7 @@ public class ToolImpl {
                     processor
                 }
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                     processor project(':b')
                 }
                 compileJava.options.annotationProcessorPath = configurations.processor
@@ -769,12 +770,12 @@ public class ToolImpl {
         buildFile << """
             project(':b') {
                 dependencies {
-                    compile project(':a')
+                    implementation project(':a')
                 }
             }
             project(':c') {
                 dependencies {
-                    compile project(':b')
+                    implementation project(':b')
                 }
                 compileJava.options.annotationProcessorPath = files()
             }
@@ -839,15 +840,18 @@ public class ToolImpl {
         given:
         settingsFile << "include 'c'"
 
+        buildFile.text = buildFile.text.replace(
+            "(name in [])",
+            "(name in ['b'])")
         buildFile << """
             project(':a') {
                 dependencies {
-                    compile project(':b')
+                    implementation project(':b')
                 }
             }
             project(':b') {
                 dependencies {
-                    compile project(':c')
+                    api project(':c')
                 }
             }
         """
@@ -880,21 +884,23 @@ public class ToolImpl {
     def "change to transitive super-class in different project should trigger recompilation 2"() {
         given:
         settingsFile << "include 'c', 'd'"
-
+        buildFile.text = buildFile.text.replace(
+            "(name in [])",
+            "(name in ['b', 'c'])")
         buildFile << """
             project(':a') {
                 dependencies {
-                    compile project(':b')
+                    implementation project(':b')
                 }
             }
             project(':b') {
                 dependencies {
-                    compile project(':c')
+                    api project(':c')
                 }
             }
             project(':c') {
                 dependencies {
-                    compile project(':d')
+                    api project(':d')
                 }
             }
         """
