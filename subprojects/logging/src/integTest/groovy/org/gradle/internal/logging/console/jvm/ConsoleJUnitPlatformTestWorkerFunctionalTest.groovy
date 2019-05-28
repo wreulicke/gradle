@@ -39,7 +39,7 @@ class ConsoleJUnitPlatformTestWorkerFunctionalTest extends AbstractConsoleJvmTes
         """
             tasks.withType(Test) {
                 useJUnitPlatform()
-            }
+            }   
         """
     }
 }
