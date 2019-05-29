@@ -67,7 +67,7 @@ public class DefaultTaskInputs implements TaskInputsInternal {
     @Override
     public boolean getHasInputs() {
         HasInputsVisitor visitor = new HasInputsVisitor();
-        TaskPropertyUtils.visitProperties(propertyWalker, task, visitor);
+        visitProperties(visitor);
         return visitor.hasInputs();
     }
 
@@ -142,7 +142,7 @@ public class DefaultTaskInputs implements TaskInputsInternal {
     @Override
     public boolean getHasSourceFiles() {
         GetInputFilesVisitor visitor = new GetInputFilesVisitor(task.toString(), fileCollectionFactory);
-        TaskPropertyUtils.visitProperties(propertyWalker, task, visitor);
+        visitProperties(visitor);
         return visitor.hasSourceFiles();
     }
 
@@ -154,7 +154,7 @@ public class DefaultTaskInputs implements TaskInputsInternal {
     @Override
     public Map<String, Object> getProperties() {
         GetInputPropertiesVisitor visitor = new GetInputPropertiesVisitor(task.getName());
-        TaskPropertyUtils.visitProperties(propertyWalker, task, visitor);
+        visitProperties(visitor);
         //noinspection ConstantConditions
         return visitor.getPropertyValuesFactory().create();
     }
@@ -189,7 +189,7 @@ public class DefaultTaskInputs implements TaskInputsInternal {
 
     @Override
     public void visitDependencies(TaskDependencyResolveContext context) {
-        TaskPropertyUtils.visitProperties(propertyWalker, task, new PropertyVisitor.Adapter() {
+        visitProperties(new PropertyVisitor.Adapter() {
             @Override
             public void visitInputProperty(String propertyName, PropertyValue value, boolean optional) {
                 context.add(value.getTaskDependencies());
@@ -201,6 +201,10 @@ public class DefaultTaskInputs implements TaskInputsInternal {
                 context.add(actualValue);
             }
         });
+    }
+
+    public void visitProperties(PropertyVisitor visitor) {
+        TaskPropertyUtils.visitProperties(propertyWalker, task, visitor);
     }
 
     private static class TaskInputUnionFileCollection extends CompositeFileCollection implements Describable {
