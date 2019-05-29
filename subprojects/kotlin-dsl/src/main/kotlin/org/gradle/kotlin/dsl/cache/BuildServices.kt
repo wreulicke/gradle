@@ -17,6 +17,7 @@
 package org.gradle.kotlin.dsl.cache
 
 import org.gradle.StartParameter
+import org.gradle.api.invocation.Gradle
 
 import org.gradle.cache.CacheRepository
 import org.gradle.cache.internal.CacheKeyBuilder
@@ -27,6 +28,7 @@ object BuildServices {
 
     @Suppress("unused")
     fun createScriptCache(
+        gradle: Gradle,
         cacheKeyBuilder: CacheKeyBuilder,
         cacheRepository: CacheRepository,
         startParameters: StartParameter
@@ -36,6 +38,7 @@ object BuildServices {
             startParameters.isBuildCacheEnabled && isKotlinDslBuildCacheEnabled
 
         return ScriptCache(
+            gradle,
             cacheRepository,
             cacheKeyBuilder,
             hasBuildCacheIntegration

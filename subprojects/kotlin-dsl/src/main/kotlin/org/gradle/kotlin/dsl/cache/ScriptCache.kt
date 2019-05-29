@@ -17,6 +17,7 @@
 package org.gradle.kotlin.dsl.cache
 
 import org.gradle.api.Project
+import org.gradle.api.invocation.Gradle
 
 import org.gradle.cache.CacheRepository
 import org.gradle.cache.internal.CacheKeyBuilder
@@ -37,6 +38,9 @@ internal
 class ScriptCache(
 
     private
+    val gradle: Gradle,
+
+    private
     val cacheRepository: CacheRepository,
 
     private
@@ -54,7 +58,7 @@ class ScriptCache(
     ): File {
         val cacheKey = cacheKeyFor(cacheKeySpec)
 
-        return cacheRepository.cache(cacheKey)
+        return cacheRepository.cache(gradle, cacheKey)
             .withProperties(cacheProperties)
             .withInitializer {
                 initializeCacheDir(
