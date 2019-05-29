@@ -68,7 +68,7 @@ public abstract class AbstractFileCollection implements FileCollectionInternal {
     }
 
     @Override
-    public Iterator<File> iterator() {
+    public Iterator<File> iterator() { // TODO optimize
         return getFiles().iterator();
     }
 
@@ -158,7 +158,7 @@ public abstract class AbstractFileCollection implements FileCollectionInternal {
 
     @Override
     public boolean isEmpty() {
-        return getFiles().isEmpty();
+        return iterator().hasNext();
     }
 
     @Override

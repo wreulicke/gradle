@@ -21,6 +21,8 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.internal.file.collections.BuildDependenciesOnlyFileCollectionResolveContext;
 import org.gradle.api.internal.file.collections.DefaultFileCollectionResolveContext;
+import org.gradle.api.internal.file.collections.DefaultFileCollectionResolveContextLazy;
+import org.gradle.api.internal.file.collections.DefaultFileCollectionResolveContextRecursive;
 import org.gradle.api.internal.file.collections.DirectoryFileTree;
 import org.gradle.api.internal.file.collections.FileCollectionContainer;
 import org.gradle.api.internal.file.collections.FileCollectionResolveContext;
@@ -37,7 +39,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * A {@link org.gradle.api.file.FileCollection} that contains the union of zero or more file collections. Maintains file ordering.
@@ -94,7 +99,7 @@ public abstract class CompositeFileCollection extends AbstractFileCollection imp
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean isEmpty() { // TODO optimize
         for (FileCollection collection : getSourceCollections()) {
             if (!collection.isEmpty()) {
                 return false;
@@ -187,9 +192,35 @@ public abstract class CompositeFileCollection extends AbstractFileCollection imp
     }
 
     protected List<? extends FileCollectionInternal> getSourceCollections() {
-        DefaultFileCollectionResolveContext context = new DefaultFileCollectionResolveContext(new IdentityFileResolver());
-        visitContents(context);
-        return context.resolveAsFileCollections();
+        DefaultFileCollectionResolveContext oldContext = new DefaultFileCollectionResolveContext(new IdentityFileResolver());
+        visitContents(oldContext);
+        List<FileCollectionInternal> old = oldContext.resolveAsFileCollections();
+
+        // TODO experiment to make sure the recursive version always produces the same output
+        {
+            DefaultFileCollectionResolveContextRecursive recursiveContext = new DefaultFileCollectionResolveContextRecursive(new IdentityFileResolver());
+            visitContents(recursiveContext);
+            List<FileCollectionInternal> recursive = recursiveContext.resolveAsFileCollections();
+            if (!Objects.equals(asStrings(old), asStrings(recursive))) {
+                throw new IllegalStateException("DefaultFileCollectionResolveContext != DefaultFileCollectionResolveContextRecursive: " + old + ", " + recursive);
+            }
+        }
+
+        // TODO experiment to make sure the lazy version always produces the same output
+        {
+            DefaultFileCollectionResolveContextLazy lazyContext = new DefaultFileCollectionResolveContextLazy(new IdentityFileResolver());
+            visitContents(lazyContext);
+            List<FileCollectionInternal> lazy = lazyContext.resolveAsFileCollections();
+            if (!Objects.equals(asStrings(old), asStrings(lazy))) {
+                throw new IllegalStateException("DefaultFileCollectionResolveContext != DefaultFileCollectionResolveContextLazy: " + old + ", " + lazy);
+            }
+        }
+
+        return old;
+    }
+
+    private <T> List<String> asStrings(List<T> old) {
+        return old.stream().map(x -> x.toString()).collect(toList());
     }
 
     @Override
